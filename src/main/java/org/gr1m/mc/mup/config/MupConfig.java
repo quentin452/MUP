@@ -94,13 +94,6 @@ public class MupConfig
         .setCategory("bug fixes")
         .setSideEffects("This fix will not be reliable on MP servers if the Forge Networking Race Condition tweak is not enabled.")
         .setComment(new String[] {"High efficiency tools / fast mining destroys some blocks client-side only"});
-
-    public final PatchDef mc9568 = new PatchDef("mc9568", PatchDef.Side.SERVER)
-        .setDisplayName("MC-9568")
-        .setCredits("Xcom, MrGrim")
-        .setCategory("bug fixes")
-        .setComment(new String[] {"Mobs suffocate / go through blocks when growing up near a solid block"});
-
     public final PatchDef mc12211 = new PatchDef("mc12211", PatchDef.Side.SERVER)
         .setDisplayName("MC-12211")
         .setCredits("RedCMD")
