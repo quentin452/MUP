@@ -6,7 +6,10 @@
   "compatibilityLevel": "JAVA_8",
   "required": true,
   "mixins": [
-    "MixinBlockObserver",
+    {
+      "mixin": "MixinBlockObserver",
+      "priority": 10000
+    },
     "MixinBlockStateContainer",
     "MixinTileEntityPistonQuark"
   ]

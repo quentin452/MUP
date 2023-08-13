@@ -81,9 +81,6 @@ long standing bugs or interoperability issues between other mods. The goal is to
 for issues that have remained unresolved for large amounts of time. 
 
 * Redstone++ 1.2d and 1.3 BETA-2 pistons can be patched to work with the MC-54026 vanilla patch.
-* If VanillaFix and FoamFix are both loaded and FoamFix has the "patchChunkSerialization" setting on, VanillaFix's
-  mixin will be disabled to prevent a crash. It is recommended to simply disable the FoamFix setting to avoid any
-  future problems.
 * Recurrent Complex has an optimization called a "Height Map Freezer" designed to suppress vanilla light updates during
   structure generation. It depends on vanilla lighting calls to clean up afterward which do not function when using the
   Newlight optimization. Since Newlight already batches updates, this patch simply disables this optimization in

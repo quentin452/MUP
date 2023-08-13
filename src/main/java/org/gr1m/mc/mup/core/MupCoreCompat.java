@@ -283,14 +283,6 @@ public class MupCoreCompat
 
                     return null;
                 }
-
-                if (MupCoreCompat.removeMixinConfiguration("mixins.vanillafix.bugs.json"))
-                {
-                    MupCore.log.warn("Loading VanillaFix and FoamFix interoperability patch.");
-
-                    patchIn.reason = null;
-                    return "mixins.mup.modcompat.vanillafoamfix.json";
-                }
             }
 
             patchIn.loaded = false;

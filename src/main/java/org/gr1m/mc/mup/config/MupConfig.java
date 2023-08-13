@@ -404,13 +404,6 @@ public class MupConfig
         .setToggleable(false)
         .setComment(new String[] {"Extends MC-54026 and MC-88959 support to Redstone++ pistons."});
 
-    public final PatchDef vanillafoamfix = new PatchDef("vanillafoamfix", PatchDef.Side.BOTH, PatchDef.ServerSyncHandlers.IGNORE)
-        .setDisplayName("VanillaFix and FoamFix Compatibility")
-        .setCredits("MrGrim")
-        .setCategory("modpatches")
-        .setToggleable(false)
-        .setComment(new String[] {"VanillaFix and FoamFix both try to fix a BlockStateContainer serialization bug. This disables VanillaFix's version if FoamFix has it enabled."});
-
     public final PatchDef rcnewlight = new PatchDef("rcnewlight", PatchDef.Side.SERVER, PatchDef.ServerSyncHandlers.IGNORE)
         .setDisplayName("Recurrent Complex and Newlight")
         .setCredits("MrGrim")

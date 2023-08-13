@@ -18,7 +18,6 @@ public class MupMixinLoader implements ILateMixinLoader
                 "mixins.mup.modcompat.redstoneplusplus.v12d.json",
                 "mixins.mup.modcompat.redstoneplusplus.v13b2.json",
                 "mixins.mup.modcompat.rsppas.json",
-                "mixins.mup.modcompat.vanillafoamfix.json",
                 "mixins.mup.mc109832-quark.json"
         );
     }
