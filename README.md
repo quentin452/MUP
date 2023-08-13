@@ -1,3 +1,7 @@
+# Libs
+
+The mod require mixinbooter 8.3+
+
 # EigenCraft Unofficial Patch
 
 An unofficial collection of patches, optimizations, and tweaks for Minecraft.
