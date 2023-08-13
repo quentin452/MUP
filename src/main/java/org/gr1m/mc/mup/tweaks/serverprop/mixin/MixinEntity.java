@@ -4,36 +4,35 @@ import net.minecraft.entity.Entity;
 import net.minecraft.util.math.MathHelper;
 import org.gr1m.mc.mup.Mup;
 import org.gr1m.mc.mup.tweaks.serverprop.config.ServerPropCustomConfig;
-import org.spongepowered.asm.lib.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Redirect;
-import org.spongepowered.asm.mixin.injection.Slice;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyVariable;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(Entity.class)
 public abstract class MixinEntity
 {
-    @Redirect(method = "move", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/math/MathHelper;clamp(DDD)D"),
-              slice = @Slice(from = @At(value = "FIELD", target = "Lnet/minecraft/entity/MoverType;PISTON:Lnet/minecraft/entity/MoverType;", ordinal = 0, opcode = Opcodes.GETSTATIC),
-                             to = @At(value = "CONSTANT", args = "stringValue=move", ordinal = 0)))
-    private double pistonEntityMoveClamp(double delta, double lowerBound, double upperBound)
+    private double overriddenBound;
+
+    @Inject(method = "move", at = @At("HEAD"))
+    private void captureOverriddenBound(double x, double y, double z, CallbackInfoReturnable<Boolean> ci)
     {
         if (Mup.config.serverprop.enabled)
         {
-            double overriddenBound = ((ServerPropCustomConfig) Mup.config.serverprop.customConfig).pistonEntityPushLimit;
-            
-            if (overriddenBound == 0.0D)
-            {
-                return delta;
-            }
-            else
-            {
-                return MathHelper.clamp(delta, 0 - overriddenBound, overriddenBound);
-            }
+            overriddenBound = ((ServerPropCustomConfig) Mup.config.serverprop.customConfig).pistonEntityPushLimit;
         }
-        else
+    }
+
+    @ModifyVariable(method = "move", ordinal = 0, at = @At(value = "INVOKE_ASSIGN",
+            target = "Lnet/minecraft/util/math/MathHelper;clamp(DDD)D"))
+    private double pistonEntityMoveClamp(double delta)
+    {
+        if (overriddenBound != 0.0D)
         {
-            return MathHelper.clamp(delta, lowerBound, upperBound);
+            return MathHelper.clamp(delta, 0 - overriddenBound, overriddenBound);
         }
+
+        return delta;
     }
 }

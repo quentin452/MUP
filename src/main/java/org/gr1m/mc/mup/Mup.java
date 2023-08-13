@@ -24,7 +24,7 @@ import java.io.File;
 @Mod(modid = Mup.MODID,
      name = Mup.NAME,
      version = Mup.VERSION,
-     dependencies = "required:forge@[14.23.5.2802,)",
+     dependencies = Mup.DEPENDENCIES,
      acceptedMinecraftVersions = "1.12.2",
      certificateFingerprint = Mup.FINGERPRINT,
      guiFactory = "org.gr1m.mc.mup.config.gui.MupGuiFactory")
@@ -35,7 +35,10 @@ public class Mup
     public static final String VERSION = "@VERSION@";
     public static final String FINGERPRINT = "@FINGERPRINT@";
 
-    public static Logger logger = LogManager.getLogger();;
+    public static final String DEPENDENCIES = "required-after:mixinbooter@[8.0,)";
+
+    public static Logger logger = LogManager.getLogger();
+
     public final static MupConfig config = new MupConfig();
     public final static MupCommand cli = new MupCommand();
 

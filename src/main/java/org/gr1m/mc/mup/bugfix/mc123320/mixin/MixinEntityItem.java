@@ -4,12 +4,13 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.world.World;
 import org.gr1m.mc.mup.Mup;
-import org.spongepowered.asm.lib.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.Slice;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(EntityItem.class)
 public abstract class MixinEntityItem extends Entity {
@@ -18,41 +19,25 @@ public abstract class MixinEntityItem extends Entity {
         super(worldIn);
     }
 
-    // If we have MC-4 fixed then enabling client side processing of items being pushed out of blocks is a good
-    // compromise. This doesn't increase network traffic, but it does aggravate MC-4 symptoms.
-    
-    @Redirect(method = "onUpdate", at = @At(value = "FIELD", target = "Lnet/minecraft/world/World;isRemote:Z", opcode = Opcodes.GETFIELD, ordinal = 0),
-              slice = @Slice(from = @At(value = "INVOKE", target = "Lnet/minecraft/entity/item/EntityItem;hasNoGravity()Z", ordinal = 0),
-                             to = @At(value = "INVOKE", target = "Lnet/minecraft/entity/item/EntityItem;pushOutOfBlocks(DDD)Z", ordinal = 0)))
-    private boolean clientPushOutOfBlocks(World world) {
+    @Redirect(method = "onUpdate", at = @At(value = "FIELD", target = "Lnet/minecraft/world/World;isRemote:Z"),
+            slice = @Slice(from = @At(value = "INVOKE", target = "Lnet/minecraft/entity/item/EntityItem;hasNoGravity()Z"),
+                    to = @At(value = "INVOKE", target = "Lnet/minecraft/entity/item/EntityItem;pushOutOfBlocks(DDD)Z")))
+    private boolean clientPushOutOfBlocksRedirect(World world) {
         return !(Mup.config.mc123320.enabled && Mup.config.mc4.enabled) && world.isRemote;
     }
-    
-    // If the MC-4 fix is disabled then we correct the issue where change in acceleration instead of change in position
-    // is being used to detect if an entity "isAirBorne" (isInMotion would be a better name for that). This will result
-    // in many more movement packets being sent for items in motion.
-    
-    @ModifyVariable(method = "onUpdate", name = "d3", at = @At(value = "STORE", ordinal = 0, opcode = Opcodes.DSTORE),
-                    slice = @Slice(from = @At(value = "INVOKE", target = "Lnet/minecraft/entity/item/EntityItem;handleWaterMovement()Z", ordinal = 0),
-                                   to = @At(value = "FIELD", target = "Lnet/minecraft/entity/item/EntityItem;isAirBorne:Z", opcode = Opcodes.PUTFIELD, ordinal = 0)))
-    private double cancelPrevMotionX(double x)
-    {
+
+    @ModifyVariable(method = "onUpdate", name = "d3", ordinal = 0, at = @At(value = "STORE"))
+    private double cancelPrevMotionX(double x, CallbackInfoReturnable<Boolean> cir) {
         return (Mup.config.mc123320.enabled && !Mup.config.mc4.enabled) ? this.motionX : x;
     }
 
-    @ModifyVariable(method = "onUpdate", name = "d4", at = @At(value = "STORE", ordinal = 0, opcode = Opcodes.DSTORE),
-                    slice = @Slice(from = @At(value = "INVOKE", target = "Lnet/minecraft/entity/item/EntityItem;handleWaterMovement()Z", ordinal = 0),
-                                   to = @At(value = "FIELD", target = "Lnet/minecraft/entity/item/EntityItem;isAirBorne:Z", opcode = Opcodes.PUTFIELD, ordinal = 0)))
-    private double cancelPrevMotionY(double y)
-    {
+    @ModifyVariable(method = "onUpdate", name = "d4", ordinal = 0, at = @At(value = "STORE"))
+    private double cancelPrevMotionY(double y, CallbackInfoReturnable<Boolean> cir) {
         return (Mup.config.mc123320.enabled && !Mup.config.mc4.enabled) ? this.motionY : y;
     }
-    
-    @ModifyVariable(method = "onUpdate", name = "d5", at = @At(value = "STORE", ordinal = 0, opcode = Opcodes.DSTORE),
-                    slice = @Slice(from = @At(value = "INVOKE", target = "Lnet/minecraft/entity/item/EntityItem;handleWaterMovement()Z", ordinal = 0),
-                                   to = @At(value = "FIELD", target = "Lnet/minecraft/entity/item/EntityItem;isAirBorne:Z", opcode = Opcodes.PUTFIELD, ordinal = 0)))
-    private double cancelPrevMotionZ(double z)
-    {
+
+    @ModifyVariable(method = "onUpdate", name = "d5", ordinal = 0, at = @At(value = "STORE"))
+    private double cancelPrevMotionZ(double z, CallbackInfoReturnable<Boolean> cir) {
         return (Mup.config.mc123320.enabled && !Mup.config.mc4.enabled) ? this.motionZ : z;
     }
 }
