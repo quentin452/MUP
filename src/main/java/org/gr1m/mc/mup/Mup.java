@@ -54,7 +54,8 @@ public class Mup
 
         config.init(new File(Launch.minecraftHome, "config/mup.cfg"));
         config.load();
-
+        MupConfig.config.save();
+        Mup.config.sync();
         if (config.mc4.isLoaded()) MC4PacketHandler.registerMessagesAndEvents();
         if (config.mc5694.isLoaded()) MC5694PacketHandler.registerMessagesAndEvents();
         if (config.mc100830.isLoaded()) MC100830PacketHandler.registerMessagesAndEvents();
