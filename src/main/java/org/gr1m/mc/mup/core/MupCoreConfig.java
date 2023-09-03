@@ -1,5 +1,6 @@
 package org.gr1m.mc.mup.core;
 
+import org.gr1m.mc.mup.Mup;
 import org.gr1m.mc.mup.core.config.Configuration;
 
 import java.io.File;
@@ -112,7 +113,7 @@ public class MupCoreConfig {
             }
             catch (Exception e)
             {
-                MupCore.log.error("[MupCore] Unknown field access reading configuration file.");
+                Mup.log.error("[MupCore] Unknown field access reading configuration file.");
                 continue;
             }
 

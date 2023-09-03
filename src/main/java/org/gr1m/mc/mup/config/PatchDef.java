@@ -5,7 +5,6 @@ import net.minecraft.network.play.INetHandlerPlayClient;
 import net.minecraft.util.text.*;
 import net.minecraftforge.common.config.Property;
 import org.gr1m.mc.mup.Mup;
-import org.gr1m.mc.mup.core.MupCore;
 import org.gr1m.mc.mup.core.MupCoreConfig;
 
 import java.lang.reflect.Field;
@@ -98,7 +97,7 @@ public class PatchDef
         // Carry over core config compatibility data
         try
         {
-            MupCoreConfig.Patch corePatch = (MupCoreConfig.Patch) MupCore.config.getClass().getDeclaredField(this.fieldName).get(MupCore.config);
+            MupCoreConfig.Patch corePatch = (MupCoreConfig.Patch) Mup.config.getClass().getDeclaredField(this.fieldName).get(Mup.config);
 
             this.compatDisabled = corePatch.enabled && !corePatch.loaded;
             this.compatReason = corePatch.reason;
@@ -144,8 +143,8 @@ public class PatchDef
         
         try
         {
-            coreField = MupCore.config.getClass().getDeclaredField(this.getFieldName());
-            return ((MupCoreConfig.Patch)coreField.get(MupCore.config)).loaded;
+            coreField = Mup.config.getClass().getDeclaredField(this.getFieldName());
+            return ((MupCoreConfig.Patch)coreField.get(Mup.config)).loaded;
         }
         catch (Exception e)
         {

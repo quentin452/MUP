@@ -16,6 +16,7 @@ import org.gr1m.mc.mup.bugfix.mc5694.network.MC5694PacketHandler;
 import org.gr1m.mc.mup.config.cli.ConfigCommand;
 import org.gr1m.mc.mup.config.network.ConfigPacketHandler;
 import org.gr1m.mc.mup.config.MupConfig;
+import org.gr1m.mc.mup.core.MupCoreConfig;
 import org.gr1m.mc.mup.tweaks.hud.Hud;
 import org.gr1m.mc.mup.tweaks.profiler.ProfilerCommand;
 
@@ -38,14 +39,14 @@ public class Mup
     public static final String DEPENDENCIES = "required-after:mixinbooter@[8.0,)";
 
     public static Logger logger = LogManager.getLogger();
-
-    public final static MupConfig config = new MupConfig();
     public final static MupCommand cli = new MupCommand();
 
     public Mup()
     {
     }
+    public static final Logger log = LogManager.getLogger();
 
+    public final static MupConfig config = new MupConfig();
     @EventHandler
     public void preInit(FMLPreInitializationEvent event)
     {

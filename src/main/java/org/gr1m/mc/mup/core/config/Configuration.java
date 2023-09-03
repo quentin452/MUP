@@ -57,7 +57,7 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.primitives.Floats;
 import net.minecraftforge.fml.relauncher.FMLInjectionData; // Safe for use in a core mod
 import org.apache.commons.io.IOUtils;
-import org.gr1m.mc.mup.core.MupCore;
+import org.gr1m.mc.mup.Mup;
 
 /**
  * This class offers advanced configurations capabilities, allowing to provide
@@ -129,8 +129,8 @@ public class Configuration
             {
                 File fileBak = new File(file.getAbsolutePath() + "_" +
                         new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date()) + ".errored");
-                
-                MupCore.log.fatal("An exception occurred while loading config file {}. This file will be renamed to {} " +
+
+                Mup.log.fatal("An exception occurred while loading config file {}. This file will be renamed to {} " +
                         "and a new config file will be generated.", file.getName(), fileBak.getName(), e);
 
                 file.renameTo(fileBak);
@@ -1045,7 +1045,7 @@ public class Configuration
         }
         catch (IOException e)
         {
-            MupCore.log.error("Error while loading config {}.", fileName, e);
+            Mup.log.error("Error while loading config {}.", fileName, e);
         }
         finally
         {
@@ -1466,7 +1466,7 @@ public class Configuration
         }
         catch (Exception e)
         {
-            MupCore.log.error("Failed to get float for {}/{}", name, category, e);
+            Mup.log.error("Failed to get float for {}/{}", name, category, e);
         }
         return defaultValue;
     }

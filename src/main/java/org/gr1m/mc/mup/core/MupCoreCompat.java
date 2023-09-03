@@ -1,6 +1,7 @@
 package org.gr1m.mc.mup.core;
 
 import akka.io.SelectionHandlerSettings;
+import org.gr1m.mc.mup.Mup;
 import org.spongepowered.asm.mixin.Mixins;
 import org.spongepowered.asm.mixin.transformer.Config;
 
@@ -43,7 +44,7 @@ public class MupCoreCompat
                 Field modFlag = MupCoreCompat.class.getField(modName);
                 Class.forName(coreModChecks.get(modName));
                 modFlag.set(MupCoreCompat.class, true);
-                MupCore.log.debug("Compatibility checker found mod: " + modName);
+                Mup.log.debug("Compatibility checker found mod: " + modName);
             }
             catch (Exception e)
             {
@@ -83,7 +84,7 @@ public class MupCoreCompat
         {
             if (MupCoreCompat.SurgeLoaded)
             {
-                MupCore.log.warn("Disabling conflicting Surge functionality for MC-2025.");
+                Mup.log.warn("Disabling conflicting Surge functionality for MC-2025.");
                 
                 // Reflection to avoid compile time dependency
                 try
@@ -105,7 +106,7 @@ public class MupCoreCompat
                 }
                 catch (Exception e)
                 {
-                    MupCore.log.warn("Failed to disable Surge fix. Disabling MC-2025 patch instead.");
+                    Mup.log.warn("Failed to disable Surge fix. Disabling MC-2025 patch instead.");
                     
                     patchIn.reason = "Incompatible with similar Surge feature and unable to disable Surge configuration.";
                     return null;
@@ -124,7 +125,7 @@ public class MupCoreCompat
         {
             if (MupCoreCompat.OptiFineLoaded)
             {
-                MupCore.log.warn("Disabling MC-63020 due to functionality overlap with Optifine.");
+                Mup.log.warn("Disabling MC-63020 due to functionality overlap with Optifine.");
 
                 patchIn.reason = "Optifine provides a similar fix.";
                 return null;
@@ -142,7 +143,7 @@ public class MupCoreCompat
         {
             if (MupCoreCompat.OptiFineLoaded)
             {
-                MupCore.log.warn("Loading Optifine compatible mixins for MC-70850.");
+                Mup.log.warn("Loading Optifine compatible mixins for MC-70850.");
 
                 patchIn.reason = null;
                 return "mixins.mup.mc70850-optifine.json";
@@ -160,7 +161,7 @@ public class MupCoreCompat
         {
             if (MupCoreCompat.QuarkLoaded)
             {
-                MupCore.log.warn("Loading Quark compatible mixins for MC-109832.");
+                Mup.log.warn("Loading Quark compatible mixins for MC-109832.");
 
                 patchIn.reason = null;
                 return "mixins.mup.mc109832-quark.json";
@@ -181,7 +182,7 @@ public class MupCoreCompat
                 patchIn.loaded = false;
                 patchIn.reason = "Tweakeroo provides the same fix";
 
-                MupCore.log.warn("Disabling MC-111444 Patch due to functionality overlap with Tweakeroo.");
+                Mup.log.warn("Disabling MC-111444 Patch due to functionality overlap with Tweakeroo.");
 
                 return null;
             }
@@ -201,7 +202,7 @@ public class MupCoreCompat
                 patchIn.loaded = false;
                 patchIn.reason = "FoamFix provides the same fix.";
 
-                MupCore.log.warn("Disabling MC-134989 Patch due to functionality overlap with FoamFix.");
+                Mup.log.warn("Disabling MC-134989 Patch due to functionality overlap with FoamFix.");
 
                 return null;
             }
@@ -218,7 +219,7 @@ public class MupCoreCompat
         {
             List<String> supportedVersions = Arrays.asList("1.2d", "1.3 BETA-2");
 
-            if (!MupCore.config.mc54026.loaded && !MupCore.config.mc88959.loaded)
+            if (!Mup.config.mc54026.loaded && !Mup.config.mc88959.loaded)
             {
                 patchIn.loaded = false;
                 patchIn.reason = "Bug fixes for neither MC-88959 nor MC-54026 are loaded.";
@@ -239,7 +240,7 @@ public class MupCoreCompat
                     return "mixins.mup.modcompat.redstoneplusplus.v13b2.json";
                 }
 
-                MupCore.log.warn("Loading RedStone++ compatibility patch.");
+                Mup.log.warn("Loading RedStone++ compatibility patch.");
             }
 
             patchIn.loaded = false;
@@ -297,7 +298,7 @@ public class MupCoreCompat
     public static final BiFunction<MupCoreConfig.Patch, LoadingStage, String> RCComplexNewlightCompatCheck = (patchIn, stage) -> {
         if (stage == LoadingStage.INIT)
         {
-            if (!MupCore.config.newlight.loaded)
+            if (!Mup.config.newlight.loaded)
             {
                 patchIn.loaded = false;
                 patchIn.reason = "Newlight optimization is not loaded.";
@@ -307,7 +308,7 @@ public class MupCoreCompat
 
             if (modList.containsKey("reccomplex"))
             {
-                MupCore.log.warn("Loading Recurrent Complex and Newlight compatibility patch.");
+                Mup.log.warn("Loading Recurrent Complex and Newlight compatibility patch.");
                 return "mixins.mup.modcompat.rcnewlight.json";
             }
             
@@ -327,7 +328,7 @@ public class MupCoreCompat
                 if (modList.containsKey("astralsorcery"))
                 {
                     patchIn.reason = null;
-                    MupCore.log.warn("Loading RedStone++ and Astral Sorcery compatibility patch.");
+                    Mup.log.warn("Loading RedStone++ and Astral Sorcery compatibility patch.");
                     
                     return "mixins.mup.modcompat.rsppas.json";
                 }
